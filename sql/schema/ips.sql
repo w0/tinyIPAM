@@ -1,4 +1,4 @@
-CREATE TABLE ip (
+CREATE TABLE ips (
     id INTEGER PRIMARY KEY,
     subnet_id INTEGER NOT NULL
     FOREIGN KEY REFERENCES subnet(id),
