@@ -1,1 +1,2 @@
-ipam.db
+ipam.db*
+.env
