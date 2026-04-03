@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/w0/tinyIPAM/internal/database"
 )
@@ -32,6 +33,10 @@ func (app *application) newSubnet(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
+		if strings.Contains(err.Error(), "UNIQUE constraint failed") {
+			app.clientError(w, http.StatusConflict)
+			return
+		}
 		app.serverError(w, r, err)
 		return
 	}
