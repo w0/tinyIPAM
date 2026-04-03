@@ -6,9 +6,9 @@ package database
 
 type Ip struct {
 	ID       int64
-	SubnetID interface{}
 	Address  string
 	IsUsed   int64
+	SubnetID int64
 }
 
 type Subnet struct {

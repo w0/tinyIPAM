@@ -10,13 +10,13 @@ import (
 )
 
 const getAllAssigned = `-- name: GetAllAssigned :many
-SELECT id, subnet_id, address, is_used FROM ips
+SELECT id, address, is_used, subnet_id FROM ips
 WHERE subnet_id = ?1
 AND is_used = TRUE
 ORDER BY address ASC
 `
 
-func (q *Queries) GetAllAssigned(ctx context.Context, subnetID interface{}) ([]Ip, error) {
+func (q *Queries) GetAllAssigned(ctx context.Context, subnetID int64) ([]Ip, error) {
 	rows, err := q.db.QueryContext(ctx, getAllAssigned, subnetID)
 	if err != nil {
 		return nil, err
@@ -27,9 +27,9 @@ func (q *Queries) GetAllAssigned(ctx context.Context, subnetID interface{}) ([]I
 		var i Ip
 		if err := rows.Scan(
 			&i.ID,
-			&i.SubnetID,
 			&i.Address,
 			&i.IsUsed,
+			&i.SubnetID,
 		); err != nil {
 			return nil, err
 		}
@@ -45,21 +45,21 @@ func (q *Queries) GetAllAssigned(ctx context.Context, subnetID interface{}) ([]I
 }
 
 const getFreeIP = `-- name: GetFreeIP :one
-SELECT id, subnet_id, address, is_used FROM ips
+SELECT id, address, is_used, subnet_id FROM ips
 WHERE subnet_id = ?1
 AND is_used = FALSE
 ORDER BY address ASC
 LIMIT 1
 `
 
-func (q *Queries) GetFreeIP(ctx context.Context, subnetID interface{}) (Ip, error) {
+func (q *Queries) GetFreeIP(ctx context.Context, subnetID int64) (Ip, error) {
 	row := q.db.QueryRowContext(ctx, getFreeIP, subnetID)
 	var i Ip
 	err := row.Scan(
 		&i.ID,
-		&i.SubnetID,
 		&i.Address,
 		&i.IsUsed,
+		&i.SubnetID,
 	)
 	return i, err
 }

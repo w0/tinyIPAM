@@ -1,7 +1,0 @@
-CREATE TABLE ips (
-    id INTEGER PRIMARY KEY,
-    subnet_id INTEGER NOT NULL
-    FOREIGN KEY REFERENCES subnet(id),
-    address TEXT NOT NULL,
-    is_used INTEGER NOT NULL DEFAULT 0
-);
